@@ -1,3 +1,10 @@
+(setq debug-on-error t)
+
+(when (<= emacs-major-version 24)
+  (error "Your emacs is too old"))
+
+(add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
+(require 'init-benchmarking)
 ;; 工具栏关闭
 (tool-bar-mode -1)
 ;; 行号显示
@@ -14,12 +21,16 @@
 (global-set-key (kbd "<f2>") 'open-init-file)
 
 ;; china mirror
-(when (>= emacs-major-version 24)
-  (require 'package)
-  (package-initialize)
-  (setq package-archives '(("gnu" . "http://elpa.emacs-china.org/gnu/")
-			   ("melpa" . "http://elpa.emacs-china.org/melpa/"))))
+(require 'package)
+(setq package-archives '(("gnu" . "http://elpa.emacs-china.org/gnu/")
+			 ("melpa" . "http://elpa.emacs-china.org/melpa/")))
 
+(package-initialize)
 (require 'evil)
 (evil-mode 1)
 (load-theme 'monokai 1)
+
+;;set gc threshold in startup and after
+(let ((n (* 32 1024 1024))
+      (i (* 128 1024 1024)))
+  (setq gc-cons-threshold i))
