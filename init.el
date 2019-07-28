@@ -31,28 +31,36 @@
 			 ("melpa" . "http://elpa.emacs-china.org/melpa/")))
 
 (package-initialize)
-(require 'evil)
+
+;;自动安装包
+(require 'cl)
+
+(defvar my/packages '(
+					  evil
+					  racket-mode
+					  monokai-theme
+					  ))
+(setq package-selected-packages my/packages)
+(defun my/packages-install-p ()
+  (loop for pkg in my/packages
+		when (not (package-installed-p pkg)) do (return nil)
+		finally (return t)))
+
+(unless (my/packages-install-p)
+  (message "%s" "Refreshing package database...")
+  (package-refresh-contents)
+  (dolist (pkg my/packages)
+	(when (not (package-installed-p pkg))
+	  (package-install pkg))))
+
+;;包配置
 (evil-mode 1)
 (load-theme 'monokai 1)
-(require 'racket-mode)
+
 (setq racket-racket-program "racket")
 (setq racket-raco-program "raco")
-
-
 
 ;;set gc threshold in startup and after
 (let ((n (* 32 1024 1024))
       (i (* 128 1024 1024)))
   (setq gc-cons-threshold i))
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(package-selected-packages (quote (go-mode racket-mode vlf monokai-theme evil))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
