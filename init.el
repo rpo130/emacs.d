@@ -6,7 +6,7 @@
 
 (setq inhibit-startup-message t)
 (menu-bar-mode 0)
-(tool-bar-mode 0)
+;(tool-bar-mode nil)
 
 (global-hl-line-mode 1)
 (global-linum-mode 1)
